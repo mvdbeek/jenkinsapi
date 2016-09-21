@@ -189,7 +189,7 @@ class JenkinsLancher(object):
                 StreamThread('out', self.q, self.jenkins_process.stdout,
                              log.info),
                 StreamThread('err', self.q, self.jenkins_process.stderr,
-                             log.warn)
+                             log.debug)
             ]
 
             # Start the threads

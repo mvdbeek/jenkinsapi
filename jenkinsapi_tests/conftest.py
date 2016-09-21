@@ -6,7 +6,10 @@ logging.basicConfig(
     level=logging.INFO
 )
 
-modules = ['requests.packages.urllib3.connectionpool']
+modules = [
+    'requests.packages.urllib3.connectionpool',
+    'jenkinsapi_utils'
+]
 for module_name in modules:
     logger = logging.getLogger(module_name)
     logger.setLevel(logging.WARNING)

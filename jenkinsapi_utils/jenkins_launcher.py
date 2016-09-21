@@ -140,6 +140,7 @@ class JenkinsLancher(object):
             # Start the threads
             for t in self.threads:
                 t.stop()
+                t.join()
 
             self.jenkins_process.terminate()
             self.jenkins_process.wait()

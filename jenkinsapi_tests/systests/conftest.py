@@ -10,6 +10,7 @@ state = {}
 # Extra plugins required by the systests
 PLUGIN_DEPENDENCIES = [
     "http://updates.jenkins-ci.org/latest/display-url-api.hpi",
+    "http://updates.jenkins-ci.org/latest/workflow-scm-step.hpi",
     "http://updates.jenkins-ci.org/latest/icon-shim.hpi",
     "http://updates.jenkins-ci.org/latest/junit.hpi",
     "http://updates.jenkins-ci.org/latest/script-security.hpi",

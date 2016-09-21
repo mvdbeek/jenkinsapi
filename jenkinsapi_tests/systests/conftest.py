@@ -47,7 +47,7 @@ def _delete_all_credentials(jenkins):
 
 
 @pytest.fixture(scope='session')
-def launched_jenkins():
+def launched_jenkins(request):
     systests_dir, _ = os.path.split(__file__)
     war_path = os.path.join(systests_dir, 'jenkins.war')
     launcher = JenkinsLancher(
@@ -62,7 +62,7 @@ def launched_jenkins():
     launcher.stop()
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope='function')
 def jenkins(launched_jenkins):
     url = launched_jenkins.jenkins_url
 

@@ -42,17 +42,27 @@ class StreamThread(threading.Thread):
         self.q = q
         self.stream = stream
         self.fn_log = fn_log
+        self._stop = threading.Event()
+
+    def stop(self):
+        self._stop.set()
+
+    def stopped(self):
+        return self._stop.isSet()
 
     def run(self):
         log.info("Starting %s", self.name)
 
         while True:
+            if self._stop.isSet():
+                break
             line = self.stream.readline()
             if line:
                 self.fn_log(line.rstrip())
                 self.q.put((self.name, line))
             else:
                 break
+
         self.q.put((self.name, None))
 
 
@@ -73,6 +83,7 @@ class JenkinsLancher(object):
             self.jenkins_url = 'http://localhost:%s' % self.http_port
             self.start_new_instance = True
 
+        self.threads = []
         self.war_path = war_path
         self.war_directory, self.war_filename = os.path.split(self.war_path)
 
@@ -125,6 +136,10 @@ class JenkinsLancher(object):
     def stop(self):
         if not self.jenkins_url:
             log.info("Shutting down jenkins.")
+            # Start the threads
+            for t in self.threads:
+                t.stop()
+
             self.jenkins_process.terminate()
             self.jenkins_process.wait()
             # Do not remove jenkins home if JENKINS_URL is set
@@ -168,7 +183,7 @@ class JenkinsLancher(object):
                 jenkins_command, stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-            threads = [
+            self.threads = [
                 StreamThread('out', self.q, self.jenkins_process.stdout,
                              log.info),
                 StreamThread('err', self.q, self.jenkins_process.stderr,
@@ -176,7 +191,7 @@ class JenkinsLancher(object):
             ]
 
             # Start the threads
-            for t in threads:
+            for t in self.threads:
                 t.start()
 
             while True:

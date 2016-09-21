@@ -116,16 +116,17 @@ class JenkinsLancher(object):
         tarball.extractall(path=self.jenkins_home)
 
     def install_plugins(self):
-        for i, url in enumerate(self.plugin_urls):
-            self.install_plugin(url, i)
-
-    def install_plugin(self, hpi_url, i):
         plugin_dir = os.path.join(self.jenkins_home, 'plugins')
+        log.info("Plugins will be installed in '%s'", plugin_dir)
+
         if not os.path.exists(plugin_dir):
             os.mkdir(plugin_dir)
 
+        for url in self.plugin_urls:
+            self.install_plugin(url, plugin_dir)
+
+    def install_plugin(self, hpi_url, plugin_dir):
         log.info("Downloading %s", hpi_url)
-        log.info("Plugins will be installed in '%s'", plugin_dir)
         path = urlparse(hpi_url).path
         filename = posixpath.basename(path)
         plugin_path = os.path.join(plugin_dir, filename)
@@ -134,7 +135,7 @@ class JenkinsLancher(object):
             h.write(request.content)
 
     def stop(self):
-        if not self.jenkins_url:
+        if self.start_new_instance:
             log.info("Shutting down jenkins.")
             # Start the threads
             for t in self.threads:

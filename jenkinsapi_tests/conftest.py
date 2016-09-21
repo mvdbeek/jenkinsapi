@@ -6,7 +6,7 @@ logging.basicConfig(
     level=logging.INFO
 )
 
-modules = ['urllib3']
+modules = ['requests.packages.urllib3.connectionpool']
 for module_name in modules:
     logger = logging.getLogger(module_name)
     logger.setLevel(logging.WARNING)

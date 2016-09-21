@@ -61,7 +61,7 @@ def launched_jenkins():
     launcher.stop()
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope='session')
 def jenkins(launched_jenkins):
     url = launched_jenkins.jenkins_url
 

@@ -56,8 +56,9 @@ class Fingerprint(JenkinsBase):
             # extract the status code from it
             response_obj = err.response
             if response_obj.status_code == 404:
-                logging.warn("MD5 cannot be checked if fingerprints are not "
-                             "enabled")
+                logging.warning(
+                    "MD5 cannot be checked if fingerprints are not "
+                    "enabled")
                 self.unknown = True
                 return True
             else:

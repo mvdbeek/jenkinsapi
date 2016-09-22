@@ -72,7 +72,7 @@ class Fingerprint(JenkinsBase):
         if self.unknown:
             # not request error, but unknown to jenkins
             return True
-        if not self._data["original"] is None:
+        if self._data["original"] is not None:
             if self._data["original"]["name"] == job:
                 if self._data["original"]["number"] == build:
                     return True

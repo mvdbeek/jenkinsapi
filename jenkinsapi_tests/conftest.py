@@ -1,3 +1,4 @@
+import os
 import logging
 
 
@@ -12,4 +13,6 @@ modules = [
 ]
 for module_name in modules:
     logger = logging.getLogger(module_name)
-    logger.setLevel(logging.WARNING)
+    level = logging.WARNING if 'LOG_LEVEL' not in os.environ \
+        else os.environ['LOG_LEVEL'].upper().strip()
+    logger.setLevel(level)

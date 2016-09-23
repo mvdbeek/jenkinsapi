@@ -1,5 +1,5 @@
 import os
-from jenkinsapi_utils.jenkins_launcher import JenkinsLancher
+from jenkinsapi_utils.jenkins_launcher import JenkinsLauncher
 
 state = {}
 
@@ -17,14 +17,15 @@ PLUGIN_DEPENDENCIES = [
     "http://updates.jenkins-ci.org/latest/git-client.hpi",
     "https://updates.jenkins-ci.org/latest/nested-view.hpi",
     "https://updates.jenkins-ci.org/latest/ssh-slaves.hpi",
-    "https://updates.jenkins-ci.org/latest/structs.hpi"
+    "https://updates.jenkins-ci.org/latest/structs.hpi",
+    "http://updates.jenkins-ci.org/latest/plain-credentials.hpi"
 ]
 
 
 def setUpPackage():
     systests_dir, _ = os.path.split(__file__)
     war_path = os.path.join(systests_dir, 'jenkins.war')
-    state['launcher'] = JenkinsLancher(
+    state['launcher'] = JenkinsLauncher(
         war_path, PLUGIN_DEPENDENCIES,
         jenkins_url=os.getenv('JENKINS_URL', None))
     state['launcher'].start()
